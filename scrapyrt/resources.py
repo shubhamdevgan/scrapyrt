@@ -236,6 +236,12 @@ class CrawlResource(ServiceResource):
                 msg += " this string cannot be decoded with JSON"
                 msg += f' {str(e)}'
                 raise Error('400', message=msg)
+        
+        #To pass arguments To spider
+        crawler_params = api_params.copy()
+        for api_param in ['max_requests', 'start_requests', 'spider_name','url']:
+            crawler_params.pop(api_param, None)
+        kwargs.update(crawler_params)
 
         dfd = self.run_crawl(
             spider_name, scrapy_request_args, max_requests,
